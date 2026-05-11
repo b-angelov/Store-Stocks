@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Accessories</title>
+</head>
+<body>
+    <ul>
+        {% for i in items %}
+            <li>
+                <span>{{ i.accessory_type.device_type }}</span>
+                <span>for {{ i.model_brand.name }}</span>
+                <span>{{ i.model_device_type.name }}</span>
+                <span>{{ i.model.model }}</span>
+                {%  if i.model.modification %}
+                    <span>{{ i.model.modification }}</span>
+                {% endif %}
+                <span>with count {{ i.accessory.count }}</span>
+                <span>and price {{ i.accessory.price_per_item | norm_price | currency_sign('EUR') }}</span>
+            </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

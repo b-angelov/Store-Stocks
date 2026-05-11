@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Device Types</title>
+</head>
+<body>
+    <ul>
+        {% for i in items %}
+            <li>
+                <span>{{ i.device_type.device_type }}</span>
+                <span></span>
+            </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

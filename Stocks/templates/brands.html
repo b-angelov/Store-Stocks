@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Brands</title>
+</head>
+<body>
+    <ul>
+        {% for i in items %}
+            <li>
+                <span>{{ i.brand.name }}</span>
+                <span>{{ i.brand.nationality }}</span>
+            </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

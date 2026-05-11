@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Mandatory Accessories</title>
+</head>
+<body>
+    <ul>
+        {% for i in items %}
+            <li>
+                <span>{{ i.device_type.device_type }}</span>
+                <span>{{ i.brand.name }}</span>
+                <span>{{ i.model.model }}</span>
+                {% if i.model.modification %}
+                    <span>{{ i.model.modification }}</span>
+                {% endif %}
+            </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

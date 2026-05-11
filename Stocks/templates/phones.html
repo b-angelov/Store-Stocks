@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Phones</title>
+</head>
+<body>
+<ul>
+{% for phone in items %}
+    <li>
+        <span>{{ phone.brand.name }}</span>
+        <span>{{ phone.model.model }}</span>
+        {% if phone.model.modification %}
+            <span>{{ phone.model.modification }}</span>
+        {% endif %}
+        <span>{{ phone.phone.RAM }}</span>
+        {% if phone.phone.battery_status %}
+            <span>{{ phone.phone.battery_status }}</span>
+        {% endif %}
+        <span>{{ phone.phone.price | norm_price | currency_sign }}</span>
+        {% if phone.phone.notes %}
+            <span>{{ phone.phone.notes }}</span>
+        {% endif %}
+    </li>
+{% endfor %}
+</ul>
+</body>
+</html>
