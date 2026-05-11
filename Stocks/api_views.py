@@ -96,7 +96,7 @@ class BaseAPIView(MethodView):
 class PhonesAPIView(BaseAPIView):
 
     methods = ["GET","POST"]
-    allowed_sort_columns = ["id","model","capacity_gb","battery_status","RAM","price","processor","id","phone_status","sold","notes","brand"]
+    allowed_sort_columns = ["id","model","capacity_gb","battery_capacity","RAM","price","processor","id","phone_status","sold","notes","brand"]
     model = PhonesModel
 
 
@@ -148,6 +148,11 @@ class BrandsAPIView(BaseAPIView):
 
     def __init__(self,*args,**kwargs):
         super().__init__(resource=BrandsResource,main_schema=BrandsSchema,*args,**kwargs)
+
+class PhonesDistinctBrandsAPIView(BrandsAPIView):
+
+    def get(self,*args,**kwargs):
+        return super().get(query=PhoneDeviceResource(api=True).get_distinct_brands(),*args,**kwargs)
 
 class BrandsItemAPIView(BrandsAPIView):
     methods = ["GET","PUT","DELETE","PATCH"]
@@ -269,7 +274,7 @@ class MandatoryAccessoriesItemAPIView(MandatoryAccessoriesAPIView):
 class AccessoriesAPIView(BaseAPIView):
 
     methods = ["GET"]
-    allowed_sort_columns = ["id","device_type","model","count","price_per_item"]
+    allowed_sort_columns = ["id","for_device_type","for_device_model","for_device_brand","count","price_per_item","brand","accessory_type"]
 
     def __init__(self,*args,**kwargs):
         super().__init__(resource=AccessoriesResource,main_schema=AccessorySchema,joined_schema=AccessoryJoinedSchema,*args,**kwargs)

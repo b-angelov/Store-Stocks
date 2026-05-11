@@ -2,6 +2,7 @@
 
 import { HiX } from "react-icons/hi";
 import Links from "./components/Links";
+import logo from "assets/img/layout/smartcomp-logo.png"
 
 import SidebarCard from "components/sidebar/componentsrtl/SidebarCard";
 import routes from "routes.js";
@@ -20,9 +21,10 @@ const Sidebar = ({ open, onClose }) => {
         <HiX />
       </span>
 
-      <div className={`mx-[56px] mt-[50px] flex items-center`}>
-        <div className="mt-1 ml-1 h-2.5 font-poppins text-[26px] font-bold uppercase text-navy-700 dark:text-white">
-          Horizon <span class="font-medium">FREE</span>
+      <div className={`mx-[56px] mt-[50px] pb-10 flex items-center`}>
+        <div className="mt-1 ml-1 h-2.5 pb-1.5 font-poppins text-[26px] font-bold uppercase text-navy-700 dark:text-white">
+          <span className={"pb-12 relative text-shadow-lg"} style={{ textShadow: "4px 1px 4px rgba(0,0,0,0.4)" }}>умен<span class="font-medium"> магазин</span></span>
+          <img className={"mt-1 ml-1 mb-1 h-14 w-3/4 shadow-xl pb-1 relative content-center items-center left-5"} src={logo} alt={"Logo"} />
         </div>
       </div>
       <div class="mt-[58px] mb-7 h-px bg-gray-300 dark:bg-white/30" />

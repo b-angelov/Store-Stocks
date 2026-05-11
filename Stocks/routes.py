@@ -2,7 +2,7 @@ from flask import Blueprint
 
 from api_views import blp, PhonesAPIView, BrandsAPIView, DeviceTypesAPIView, ModelsAPIView, AccessoriesAPIView, \
     MandatoryAccessoriesAPIView, PhonesItemAPIView, BrandsItemAPIView, DeviceTypesItemAPIView, ModelsItemAPIView, \
-    MandatoryAccessoriesItemAPIView, AccessoriesItemAPIView
+    MandatoryAccessoriesItemAPIView, AccessoriesItemAPIView, PhonesDistinctBrandsAPIView
 from resources import PhoneDeviceResource, BrandsResource
 from views import ListPhonesView, ListBrandsView, ListDeviceTypesView, ListModelsView, ListAccessoriesView, \
     ListMandatoryAccessoriesView
@@ -23,6 +23,7 @@ routes_bp.route('/accessories/')(ListAccessoriesView.as_view("accessories_list_v
 routes_bp.route('/mandatory_accessories/')(ListMandatoryAccessoriesView.as_view("mandatory_accessories_list_view"))
 
 blp.add_url_rule(api('/phones/'),view_func=PhonesAPIView.as_view("phones_list_api_view"))
+blp.add_url_rule(api('/phones/brands/'),view_func=PhonesDistinctBrandsAPIView.as_view("phones_distinct_brands_list_api_view"))
 blp.add_url_rule(api('/phones/<int:id>'),view_func=PhonesItemAPIView.as_view("phones_item_api_view"))
 blp.add_url_rule(api('/brands/'),view_func=BrandsAPIView.as_view("brands_list_api_view"))
 blp.add_url_rule(api('/brands/<int:id>'),view_func=BrandsItemAPIView.as_view("brands_item_api_view"))

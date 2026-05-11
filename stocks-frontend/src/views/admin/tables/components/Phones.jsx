@@ -1,6 +1,9 @@
 import {columnsPhones} from "../variables/columnsData";
 import {RenderTable} from "./RenderTable";
 import {nameMap} from "../../../../my-utils/nameRemapper";
+import InputField from "../../../../components/fields/InputField";
+import Card from "../../../../components/card";
+import {MdOutlineSmartphone} from "react-icons/md";
 
 const columns = [
   {
@@ -57,13 +60,32 @@ const mapFunction = (val)=>({
                 notes:val.notes,
         })
 
+const brandsColumns = [
+     {
+    Header: "НАЛИЧНИ МАРКИ ТЕЛЕФОНИ",
+    accessor: "name",
+    type: "vendor",
+  }
+]
+
+const brandMapFn = (val) =>({
+    ...val
+})
+
 export const Phones = () =>{
-    return (
+    return (<>
+            <RenderTable
+                url={"/phones/brands/?related=1"}
+                columns={brandsColumns}
+                tableName ={"НАЛИЧНИ МАРКИ"}
+                mapFunction={brandMapFn}
+            />
+
         <RenderTable
             url="/phones/?related=1"
             columns={columns}
             tableName = "Телефони в наличност"
             mapFunction = {mapFunction}
-        />
+        /></>
     )
 }

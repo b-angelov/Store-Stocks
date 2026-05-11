@@ -4,13 +4,13 @@ import {nameMap} from "../../../../my-utils/nameRemapper";
 
 const columns = [
   {
-    Header: "Вид Аксесоар",
+    Header: "ВИД АКСАЕСОАР",
     accessor: "accessory_type",
     type: "name"
 
   },
   {
-    Header: "ЗА",
+    Header: "ЗА ТИП УСТРОЙСТВО",
     accessor: "for_device_type",
     type:"name"
   },
@@ -42,7 +42,7 @@ const mapFunction = (val)=>({
                 for_device_type: nameMap(val?.model_data?.device_type_data?.device_type),
                 for_device_brand: val?.model_data?.brand_data?.name,
                 for_device_model: `${val?.model_data?.model} ${val?.model_data?.modification ?? ""}`,
-                count_available: val?.count,
+                count: val?.count,
                 price_per_item: val?.price_per_item
         })
 

@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 
 from flask.sansio.blueprints import Blueprint
-from sqlalchemy import Select, select, inspect, desc, cast, Float
+from sqlalchemy import Select, select, inspect, desc, cast, Float, Integer
 from sqlalchemy.orm import Session, aliased, selectinload
 
 from models import PhonesModel, ModelsModel, BrandsModel, DeviceTypesModel, AccessoryModel, \
@@ -118,6 +118,9 @@ class BrandsResource(BaseResource):
 
     def with_id(self, id: int, *args, **kwargs):
         return self._clone(self.query.where(BrandsModel.__table__.c.id==id))
+
+    def in_id_list(self,ids:list|tuple,*args,**kwargs):
+        return self._clone(self.query.where(BrandsModel.__table__.c.id.in_(ids)))
 
 
 class DeviceTypesResource(BaseResource):
@@ -276,11 +279,12 @@ class AccessoriesResource(BaseResource):
 
     def sort_by_multiple(self, sort_map=None, *args, **kwargs):
         sort_map = {
-            "device_type": lambda asc: self._order_query(self.model.device_type, asc),
-            "brand": lambda asc: self._order_query((BrandsModel.name,BrandsModel.id), asc),
-            "model": lambda asc: self._order_query((ModelsModel.model,ModelsModel.id), asc),
-            "count": lambda asc: self._order_query((self.model.count,), asc),
-            "price_per_item": lambda asc: self._order_query((self.model.price_per_item,), asc),
+            "accessory_type": lambda asc: self._order_query(self.model.device_type, asc),
+            "for_device_type": lambda asc: self._order_query(model_device_type.device_type, asc),
+            "for_device_brand": lambda asc: self._order_query((BrandsModel.name,BrandsModel.id), asc),
+            "for_device_model": lambda asc: self._order_query((ModelsModel.model,ModelsModel.id), asc),
+            "count": lambda asc: self._order_query((cast(self.model.count, Integer),), asc),
+            "price_per_item": lambda asc: self._order_query((cast(self.model.price_per_item,Float),), asc),
         }
         return super().sort_by_multiple(sort_map, *args, **kwargs)
 
@@ -417,9 +421,9 @@ class PhoneDeviceResource(BaseResource):
             "brand": lambda asc: self._order_query((BrandsModel.name,BrandsModel.id), asc),
             "model": lambda asc: self._order_query((ModelsModel.model,ModelsModel.id), asc),
             "price": lambda asc: self._order_query((cast(self.model._price, Float),), asc),
-            "capacity_gb": lambda asc: self._order_query((self.model._capacity_gb,), asc),
-            "battery_capacity": lambda asc: self._order_query((self.model.battery_capacity,), asc),
-            "RAM": lambda asc: self._order_query((self.model._ram,), asc),
+            "capacity_gb": lambda asc: self._order_query((cast(self.model._capacity_gb,Integer),), asc),
+            "battery_capacity": lambda asc: self._order_query((cast(self.model._battery_status, Float),), asc),
+            "RAM": lambda asc: self._order_query((cast(self.model._ram,Integer),), asc),
             "processor": lambda asc: self._order_query((self.model.processor,), asc),
             "phone_status": lambda asc: self._order_query((self.model.phone_status,), asc),
             "sold": lambda asc: self._order_query((self.model.sold,), asc),
@@ -494,6 +498,12 @@ class PhoneDeviceResource(BaseResource):
 
     def with_battery_status_below(self, battery_status: int,*args, **kwargs):
         return self._clone(self.query.where(PhonesModel.__table__.c.batter_status<battery_status))
+
+    def get_distinct_brands(self, *args, **kwargs):
+        subq = select(BrandsModel.id).join(ModelsModel,ModelsModel.brand==BrandsModel.id).join(PhonesModel,PhonesModel.model==ModelsModel.id).distinct().scalar_subquery()
+        brands = BrandsResource(api=True)
+        query = brands.query.where(BrandsModel.id.in_(subq))
+        return brands._clone(query)
 
 
 
