@@ -72,6 +72,8 @@ const brandMapFn = (val) =>({
     ...val
 })
 
+const preProcessDataFn = (data) =>([{name:data.map(brand=>brand.name)}])
+
 export const Phones = () =>{
     return (<>
             <RenderTable
@@ -79,6 +81,8 @@ export const Phones = () =>{
                 columns={brandsColumns}
                 tableName ={"НАЛИЧНИ МАРКИ"}
                 mapFunction={brandMapFn}
+                preProcessDataFn={preProcessDataFn}
+                columnParams={({titleBelow:true,})}
             />
 
         <RenderTable

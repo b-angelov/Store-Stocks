@@ -7,8 +7,9 @@ import {columnsModels} from "../variables/columnsData";
 import {FadeLoader} from "react-spinners";
 import {MainSpinner} from "../../../../components/spinners/spinners";
 
-export const RenderTable = ({url, columns, tableName,mapFunction}) => {
-    const [pagination, setPagination] = useState({
+export const RenderTable = ({url, columns, tableName,mapFunction, preProcessDataFn, columnParams}) => {
+  preProcessDataFn = preProcessDataFn ?? (val=>val);
+  const [pagination, setPagination] = useState({
         pageIndex: 0,
         pageSize: 15,
       })
@@ -28,7 +29,7 @@ export const RenderTable = ({url, columns, tableName,mapFunction}) => {
     const processedData = useMemo((data)=>{
         if (!ModelsData) return {}
         console.log(ModelsData.items)
-        return {data: ModelsData?.items?.map(mapFunction), pagination:ModelsData?.pagination}
+        return {data: preProcessDataFn(ModelsData?.items?.map(mapFunction)), pagination:ModelsData?.pagination}
     },[ModelsData])
     let component;
     if(error) component =(<div className={"error-decor"}>Something went wrong with table data loading!{error.code}</div>);
@@ -46,6 +47,7 @@ export const RenderTable = ({url, columns, tableName,mapFunction}) => {
           setPagination = {setPagination}
           sorting={sorting}
           setSorting = {setSorting}
+          columnParams={columnParams}
           key={`${url}&page=${pagination?.pageIndex + 1}&page_size=${pagination?.pageSize ?? 10}${sortParams}`}
         /></>)}
       </div>)

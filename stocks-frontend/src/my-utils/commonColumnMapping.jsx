@@ -8,7 +8,7 @@ import {nanoid} from "nanoid";
 import {nameMap} from "./nameRemapper";
 
 
-function columnMapper(columnHelper, columnData, tableData, instanceId = null) {
+function columnMapper(columnHelper, columnData, tableData,params=null, instanceId = null) {
     const iconApiURL = process.env.REACT_APP_ICON_API_URL || ""
 
     columnData = columnData.map((col) => {
@@ -157,23 +157,31 @@ function columnMapper(columnHelper, columnData, tableData, instanceId = null) {
 
 
             // VENDOR COLUMN
-            vendor: () => columnHelper.accessor(col.accessor, {
+            vendor: (params) => columnHelper.accessor(col.accessor, {
                 id: col.accessor,
                 header: () => (
                     <p className="text-sm font-bold text-gray-600 dark:text-white">{col.Header}</p>
                 ),
                 cell: (info) => {
+                    let direction = "flex"
+                    let marRight = ""
+                    let marLeft = ""
+                    if(params?.titleBelow){
+                        direction = ""
+                        marRight = "mr-8"
+                        marLeft = "ml-2"
+                    }
                     const instanceId = nanoid();
                     let value = info.getValue()
                     if (typeof value === "string") value = [value]
-                    return (<div className="flex items-center gap-2">
+                    return (<div className={"flex items-center gap-2"}>
                         {value?.map((item, key) => {
                             return (
                                 <figure key={`${instanceId}-${col.accessor}-${key}`}
-                                        className={"flex item-center gap-3"}>
-                                    <img alt={"brand logo"} className="h-8 w-8 flex"
+                                        className={direction + " item-center content-center justify-center gap-3"}>
+                                    <img alt={"brand logo"} className={"h-8 w-8 " + marLeft}
                                          src={iconApiURL.replace("%searchable%", nameMap(item))}/>
-                                    <span className={"capitalize font-bold"}>{item}</span>
+                                    <span className={"capitalize text-center font-bold " + marRight}>{item}</span>
                                 </figure>
 
                             )
@@ -185,7 +193,7 @@ function columnMapper(columnHelper, columnData, tableData, instanceId = null) {
             })
         }
 
-        return columnTypes[col.type || "name"]()
+        return columnTypes[col.type || "name"](params)
     })
     return columnData
 }

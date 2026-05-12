@@ -8,11 +8,11 @@ import {MainSpinner} from "../../../../components/spinners/spinners";
 import {MdChevronLeft, MdChevronRight} from "react-icons/md";
 
 function CommonTable(props){
-const { tableData, columnsData, TableName, isLoading, isValidating,tablePagination,setPagination, paginationState, sorting, setSorting } = props;
+const { tableData, columnsData, columnParams, TableName, isLoading, isValidating,tablePagination,setPagination, paginationState, sorting, setSorting } = props;
   console.log(columnsData)
   // const [sorting, setSorting] = React.useState([]);
   let defaultData = tableData;
-  const columns = columnMapper(columnHelper,columnsData)
+  const columns = columnMapper(columnHelper,columnsData,null,columnParams)
   console.log(tablePagination)
    // eslint-disable-next-line
   const [data, setData] = React.useState(() => [...defaultData]);
