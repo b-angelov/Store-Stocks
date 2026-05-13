@@ -8,7 +8,7 @@ import {nanoid} from "nanoid";
 import {nameMap} from "./nameRemapper";
 
 
-function columnMapper(columnHelper, columnData, tableData,params=null, instanceId = null) {
+function columnMapper(columnHelper, columnData, tableData,params=null, instanceId = null,children=null) {
     const iconApiURL = process.env.REACT_APP_ICON_API_URL || ""
 
     columnData = columnData.map((col) => {
@@ -177,7 +177,7 @@ function columnMapper(columnHelper, columnData, tableData,params=null, instanceI
                     return (<div className={"flex items-center gap-2"}>
                         {value?.map((item, key) => {
                             return (
-                                <figure key={`${instanceId}-${col.accessor}-${key}`}
+                                <figure key={`${instanceId}-${col.accessor}-${key}`} onClick={(e)=>params?.vendorOnClick?.(e,params,item)}
                                         className={direction + " item-center content-center justify-center gap-3"}>
                                     <img alt={"brand logo"} className={"h-8 w-8 " + marLeft}
                                          src={iconApiURL.replace("%searchable%", nameMap(item))}/>
@@ -190,7 +190,22 @@ function columnMapper(columnHelper, columnData, tableData,params=null, instanceI
                 }
 
 
-            })
+            }),
+
+            // FILLABLE COLUMN
+
+            fillable: (params) => columnHelper.accessor(col.accessor, {
+                id: col.accessor,
+                header: () => (
+                    <p className="text-sm font-bold text-gray-600 dark:text-white">{col.Header}</p>
+                ),
+                cell: (info) => {
+
+                    return (<div className={"flex items-center gap-2"}>
+                        {children}
+                    </div>)
+                }
+            }),
         }
 
         return columnTypes[col.type || "name"](params)

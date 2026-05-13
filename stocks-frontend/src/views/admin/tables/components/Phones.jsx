@@ -4,6 +4,7 @@ import {nameMap} from "../../../../my-utils/nameRemapper";
 import InputField from "../../../../components/fields/InputField";
 import Card from "../../../../components/card";
 import {MdOutlineSmartphone} from "react-icons/md";
+import {useState} from "react";
 
 const columns = [
   {
@@ -75,21 +76,37 @@ const brandMapFn = (val) =>({
 const preProcessDataFn = (data) =>([{name:data.map(brand=>brand.name)}])
 
 export const Phones = () =>{
-    return (<>
-            <RenderTable
-                url={"/phones/brands/?related=1"}
-                columns={brandsColumns}
-                tableName ={"НАЛИЧНИ МАРКИ"}
-                mapFunction={brandMapFn}
-                preProcessDataFn={preProcessDataFn}
-                columnParams={({titleBelow:true,})}
-            />
+
+    const [filters, setFilters] = useState({
+        brandFilter: false,
+    })
+
+    return (
+      <>
+        <RenderTable
+          url={"/phones/brands/?related=1"}
+          columns={brandsColumns}
+          tableName={"НАЛИЧНИ МАРКИ"}
+          mapFunction={brandMapFn}
+          preProcessDataFn={preProcessDataFn}
+          columnParams={{
+            titleBelow: true,
+            vendorOnClick: (e, params, item) => {
+                // e.stopPropagation();
+              setFilters((old) => ({ ...old, brandFilter: item }));
+            },
+          }}
+        />
 
         <RenderTable
-            url="/phones/?related=1"
-            columns={columns}
-            tableName = "Телефони в наличност"
-            mapFunction = {mapFunction}
-        /></>
-    )
+          url={
+            "/phones/?related=1" +
+            (filters?.brandFilter ? `&of_brand=${filters.brandFilter}` : "")
+          }
+          columns={columns}
+          tableName="Телефони в наличност"
+          mapFunction={mapFunction}
+        />
+      </>
+    );
 }
