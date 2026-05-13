@@ -8,6 +8,7 @@ export const nameMap = (val) => ({
         "phones": "смартфони",
         "phone": "смартфон",
         "wallet cases": "тефтери",
-        "screen protector": "екранни протектори"
+        "screen protector": "екранни протектори",
+        "all": "alphabet",
 }[val?.toLowerCase()] ?? val
 )

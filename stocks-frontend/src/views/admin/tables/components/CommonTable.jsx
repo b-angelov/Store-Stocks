@@ -8,7 +8,7 @@ import {MainSpinner} from "../../../../components/spinners/spinners";
 import {MdChevronLeft, MdChevronRight} from "react-icons/md";
 
 function CommonTable(props){
-const { tableData, columnsData, columnParams, TableName, isLoading, isValidating,tablePagination,setPagination, paginationState, sorting, setSorting } = props;
+const { tableData, columnsData, columnParams, TableName, isLoading, isValidating,tablePagination,setPagination, paginationState, sorting, setSorting, children } = props;
   console.log(columnsData)
   // const [sorting, setSorting] = React.useState([]);
   let defaultData = tableData;
@@ -107,6 +107,7 @@ const { tableData, columnsData, columnParams, TableName, isLoading, isValidating
               })}
           </tbody>
         </table>
+        {children}
         <div className="flex items-center justify-between px-4 py-4">
   <div className="flex items-center gap-2">
     <button

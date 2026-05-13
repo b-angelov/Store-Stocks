@@ -66,20 +66,23 @@ const brandsColumns = [
     Header: "НАЛИЧНИ МАРКИ ТЕЛЕФОНИ",
     accessor: "name",
     type: "vendor",
-  }
+  },
 ]
 
 const brandMapFn = (val) =>({
     ...val
 })
 
-const preProcessDataFn = (data) =>([{name:data.map(brand=>brand.name)}])
 
 export const Phones = () =>{
 
     const [filters, setFilters] = useState({
         brandFilter: false,
     })
+
+    const preProcessDataFn = (data) =>([
+        {name: ["all"].concat(data.map(brand=>brand.name))}
+    ])
 
     return (
       <>
@@ -93,10 +96,12 @@ export const Phones = () =>{
             titleBelow: true,
             vendorOnClick: (e, params, item) => {
                 // e.stopPropagation();
-              setFilters((old) => ({ ...old, brandFilter: item }));
+              setFilters((old) => ({ ...old, brandFilter: item == "all" ? false : item }));
             },
           }}
-        />
+        >
+          <InputField label={"На"}/>
+        </RenderTable>
 
         <RenderTable
           url={

@@ -7,7 +7,7 @@ import {columnsModels} from "../variables/columnsData";
 import {FadeLoader} from "react-spinners";
 import {MainSpinner} from "../../../../components/spinners/spinners";
 
-export const RenderTable = ({url, columns, tableName,mapFunction, preProcessDataFn, columnParams}) => {
+export const RenderTable = ({url, columns, tableName,mapFunction, preProcessDataFn, columnParams, children}) => {
   preProcessDataFn = preProcessDataFn ?? (val=>val);
   const [pagination, setPagination] = useState({
         pageIndex: 0,
@@ -48,6 +48,7 @@ export const RenderTable = ({url, columns, tableName,mapFunction, preProcessData
           sorting={sorting}
           setSorting = {setSorting}
           columnParams={columnParams}
+          children={children}
           key={`${url}&page=${pagination?.pageIndex + 1}&page_size=${pagination?.pageSize ?? 10}${sortParams}`}
         /></>)}
       </div>)
