@@ -5,6 +5,7 @@ import InputField from "../../../../components/fields/InputField";
 import Card from "../../../../components/card";
 import {MdOutlineSmartphone} from "react-icons/md";
 import {useState} from "react";
+import Dropdown from "../../../../components/dropdown";
 
 const columns = [
   {
@@ -95,12 +96,32 @@ export const Phones = () =>{
           columnParams={{
             titleBelow: true,
             vendorOnClick: (e, params, item) => {
-                // e.stopPropagation();
-              setFilters((old) => ({ ...old, brandFilter: item == "all" ? false : item }));
+              // e.stopPropagation();
+              setFilters((old) => ({
+                ...old,
+                brandFilter: item == "all" ? false : item,
+              }));
             },
           }}
         >
-          <InputField label={"На"}/>
+          <Dropdown
+            // 1. Подаваме задействащия елемент (бутон или input)
+            button={
+              <InputField
+                placeholder={"Налични модели"}
+                classNames={
+                  "rounded-xl bg-lightPrimary p-3 text-sm font-medium text-navy-700 outline-none dark:bg-navy-800 dark:text-white w-64"
+                }
+              />
+            }
+            // 2. Позициониране и анимация
+            classNames="!left-0 !right-auto top-12 left-0 w-64"
+            animation="origin-top-left transition-all duration-300 ease-in-out"
+          >
+            <div className=" mt-4 rounded-[20px] bg-white p-4 shadow-xl dark:bg-navy-700">
+              My thing
+            </div>
+          </Dropdown>
         </RenderTable>
 
         <RenderTable

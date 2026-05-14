@@ -154,6 +154,7 @@ class PhonesDistinctBrandsAPIView(BrandsAPIView):
     def get(self,*args,**kwargs):
         return super().get(query=PhoneDeviceResource(api=True).get_distinct_brands(),*args,**kwargs)
 
+
 class BrandsItemAPIView(BrandsAPIView):
     methods = ["GET","PUT","DELETE","PATCH"]
 
@@ -213,7 +214,7 @@ class ModelsAPIView(BaseAPIView):
         super().__init__(resource=ModelsResource,main_schema=ModelsSchema,joined_schema=ModelsJoinedSchema,*args,**kwargs)
 
     def get(self):
-        return super().get(query=self.resource(api=True).apply_filters().api_load_compatible_accessories())
+        return super().get(query=self.resource(api=True).apply_filters(request.args).api_load_compatible_accessories())
 
 
 class ModelsItemAPIView(ModelsAPIView):
@@ -242,6 +243,11 @@ class ModelsItemAPIView(ModelsAPIView):
     @blp.arguments(ModelsSchema)
     def delete(self,id,*args, **kwargs):
         return self._delete_singular_logic(id)
+
+class PhonesDistinctModelsAPIView(ModelsAPIView):
+
+    def get(self,*args,**kwargs):
+        return super(ModelsAPIView, self).get(query=PhoneDeviceResource(api=True).get_distinct_models().apply_filters(request.args),*args,**kwargs)
 
 
 class MandatoryAccessoriesAPIView(BaseAPIView):

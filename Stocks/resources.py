@@ -505,6 +505,12 @@ class PhoneDeviceResource(BaseResource):
         query = brands.query.where(BrandsModel.id.in_(subq))
         return brands._clone(query)
 
+    def get_distinct_models(self, *args, **kwargs):
+        subq = select(ModelsModel.id).join(PhonesModel,PhonesModel.model==ModelsModel.id).join(BrandsModel,ModelsModel.brand==BrandsModel.id).join(DeviceTypesModel,ModelsModel.device_type==DeviceTypesModel.id).distinct().scalar_subquery()
+        models = ModelsResource(api=True)
+        query = models.query.where(ModelsModel.id.in_(subq))
+        return models._clone(query)
+
 
 
 
