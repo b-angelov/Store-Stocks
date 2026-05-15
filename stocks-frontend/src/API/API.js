@@ -8,9 +8,10 @@ const API = axios.create({
 })
 
 const fetcher = (url) => API.get(url).then((res) => {
+    const paginationHeader = res.headers['x-pagination'];
     return {
         items:[...res.data],
-        pagination: JSON.parse(res.headers['x-pagination'])
+        pagination: paginationHeader ? JSON.parse(paginationHeader) :null
     }
 });
 

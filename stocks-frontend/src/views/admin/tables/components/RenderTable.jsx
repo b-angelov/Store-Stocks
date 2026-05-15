@@ -32,6 +32,7 @@ export const RenderTable = ({url, columns, tableName,mapFunction, preProcessData
         return {data: preProcessDataFn(ModelsData?.items?.map(mapFunction)), pagination:ModelsData?.pagination}
     },[ModelsData])
     let component;
+    console.log(error)
     if(error) component =(<div className={"error-decor"}>Something went wrong with table data loading!{error.code}</div>);
   if(ModelsData) component = (
 

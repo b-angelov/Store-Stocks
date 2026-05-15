@@ -43,7 +43,7 @@ class BaseAPIView(MethodView):
         return list(sort_fields) if len(sort_fields) else [["id","asc"]]
 
     @blp.paginate()
-    def get(self, pagination_parameters, query=None):
+    def get(self, pagination_parameters, query=None, escape_pagination=False):
         if query is None:
             query = self.resource(api=True).apply_filters(request.args)
         related = request.args.get("related", "false")
@@ -52,9 +52,10 @@ class BaseAPIView(MethodView):
         sort_params = self._get_sort_fields()
         query = query.sort_by_multiple(items=sort_params)
         query = query.query
-        items = select(func.count()).select_from(query.subquery())
-        pagination_parameters.item_count = db.session.execute(items).scalar()
-        query = query.limit(pagination_parameters.page_size).offset(pagination_parameters.first_item)
+        if not escape_pagination:
+            items = select(func.count()).select_from(query.subquery())
+            pagination_parameters.item_count = db.session.execute(items).scalar()
+            query = query.limit(pagination_parameters.page_size).offset(pagination_parameters.first_item)
         # sort_params = self._get_sort_fields()
         # model = query.column_descriptions[0]["entity"]
         # query = query.order_by(*(getattr(model,field,None) if direction =="asc" else  desc(getattr(model,field,None)) for field,direction in sort_params))
@@ -152,7 +153,7 @@ class BrandsAPIView(BaseAPIView):
 class PhonesDistinctBrandsAPIView(BrandsAPIView):
 
     def get(self,*args,**kwargs):
-        return super().get(query=PhoneDeviceResource(api=True).get_distinct_brands(),*args,**kwargs)
+        return super().get(query=PhoneDeviceResource(api=True).get_distinct_brands(),escape_pagination=True,*args,**kwargs)
 
 
 class BrandsItemAPIView(BrandsAPIView):
@@ -247,7 +248,7 @@ class ModelsItemAPIView(ModelsAPIView):
 class PhonesDistinctModelsAPIView(ModelsAPIView):
 
     def get(self,*args,**kwargs):
-        return super(ModelsAPIView, self).get(query=PhoneDeviceResource(api=True).get_distinct_models().apply_filters(request.args),*args,**kwargs)
+        return super(ModelsAPIView, self).get(query=PhoneDeviceResource(api=True).get_distinct_models().apply_filters(request.args),escape_pagination=True,*args,**kwargs)
 
 
 class MandatoryAccessoriesAPIView(BaseAPIView):
